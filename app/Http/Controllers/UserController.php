@@ -15,6 +15,8 @@ class UserController extends Controller
         $email = $request->query('email');
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
+        $page = $request->page ?? 1;
+        $perPage = $request->perPage ?? 5;
         $query = User::orderBy('id', 'desc');
 
         if ($name) {
@@ -37,7 +39,7 @@ class UserController extends Controller
             $query->whereDate('created_at', '<', $end_date);
         }
 
-        $users = $query->get();
+        $users = $query->offset($perPage * ($page - 1))->limit($perPage)->get();
         
         return Inertia::render('User/Index', [
             'users' => $users->map(function ($item) {
@@ -47,6 +49,7 @@ class UserController extends Controller
                     'created_at' => $item->created_at->toFormattedDateString(),
                 ];
             }),
+            'count' => User::count(),
         ]);
     }
 

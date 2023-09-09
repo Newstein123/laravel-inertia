@@ -1,9 +1,7 @@
 import React from 'react'
 
-const UserSearch = ({setData}) => {
+const UserSearch = ({setData, data}) => {
 
-  const queryParams = new URLSearchParams(window.location.search);
-  const {name, email, start_date, end_date} = Object.fromEntries(queryParams.entries())
   return (
     <div className='container my-3'>
       <div className="row">
@@ -11,7 +9,7 @@ const UserSearch = ({setData}) => {
             <label htmlFor="name">Name</label>
             <input 
                 type="text" 
-                value={name}
+                value={data.name}
                 onChange={e => setData('name',e.target.value)}
                 className='form-control'
                 placeholder='Enter Name'
@@ -21,7 +19,7 @@ const UserSearch = ({setData}) => {
             <label htmlFor="name">Email</label>
             <input 
                 type="text" 
-                value={email}
+                value={data.email}
                 onChange={e => setData('email',e.target.value)}
                 className='form-control'
                 placeholder='Enter Email'
@@ -30,7 +28,7 @@ const UserSearch = ({setData}) => {
         <div className="col-md-2">
             <label htmlFor="name"> Start Date </label>
             <input 
-                value={start_date}
+                value={data.start_date}
                 onChange={e => setData('start_date',e.target.value)}
                 type="date" 
                 className='form-control'
@@ -39,7 +37,7 @@ const UserSearch = ({setData}) => {
         <div className="col-md-2">
             <label htmlFor="name"> End Date </label>
             <input 
-                value={end_date}
+                value={data.end_date}
                 onChange={e => setData('end_date',e.target.value)}
                 type="date" 
                 className='form-control'
