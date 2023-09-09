@@ -10,8 +10,35 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index() {
-        $users = User::orderBy('id', 'desc')->get();
+    public function index(Request $request) {
+        $name = $request->query('name');
+        $email = $request->query('email');
+        $start_date = $request->query('start_date');
+        $end_date = $request->query('end_date');
+        $query = User::orderBy('id', 'desc');
+
+        if ($name) {
+            $query->where(function ($query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            });
+        }
+        
+        if ($email) {
+            $query->where(function ($query) use ($email) {
+                $query->where('email', 'like', '%' . $email . '%');
+            });
+        }
+        
+        if ($start_date) {
+            $query->whereDate('created_at', '>', $start_date);
+        }
+        
+        if ($end_date) {
+            $query->whereDate('created_at', '<', $end_date);
+        }
+
+        $users = $query->get();
+        
         return Inertia::render('User/Index', [
             'users' => $users->map(function ($item) {
                 return [
